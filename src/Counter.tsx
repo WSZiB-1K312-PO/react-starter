@@ -1,9 +1,10 @@
 import React from 'react';
 
-interface CounterProps {
+export interface CounterProps {
     initialValue?: number;
     minValue?: number;
     maxValue?: number;
+    valueChanged?: (newValue: number) => void
 }
 
 interface CounterState {
@@ -29,18 +30,34 @@ export class Counter extends React.Component<CounterProps, CounterState> {
     }
 
     minusOne() {
-        if(this.props.minValue && this.props.minValue < this.state.count) {
+        if(this.props.minValue) {
+            if(this.props.minValue < this.state.count) {
+                this.setState({
+                    count: this.state.count - 1
+                })
+                this.props.valueChanged?.(this.state.count - 1);
+            }
+        } else {
             this.setState({
                 count: this.state.count - 1
             })
+            this.props.valueChanged?.(this.state.count - 1);
         }
     }
 
     plusOne() {
-        if(this.props.maxValue && this.props.maxValue > this.state.count) {
+        if(this.props.maxValue) {
+            if(this.props.maxValue > this.state.count) {
+                this.setState({
+                    count: this.state.count + 1
+                })
+                this.props.valueChanged?.(this.state.count + 1);
+            }
+        } else {
             this.setState({
                 count: this.state.count + 1
             })
+            this.props.valueChanged?.(this.state.count + 1);
         }
     }
 }
